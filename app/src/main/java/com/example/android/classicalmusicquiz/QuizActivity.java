@@ -17,6 +17,7 @@
 package com.example.android.classicalmusicquiz;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,13 +44,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private int mHighScore;
     private Button[] mButtons;
 
+    private SimpleExoPlayerView mPlayerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        ImageView composerView = (ImageView) findViewById(R.id.composerView);
+        mPlayerView = (SimpleExoPlayerView) findViewById(R.id.playerView);
 
         boolean isNewGame = !getIntent().hasExtra(REMAINING_SONGS_KEY);
 
@@ -68,8 +73,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         mQuestionSampleIDs = QuizUtils.generateQuestion(mRemainingSampleIDs);
         mAnswerSampleID = QuizUtils.getCorrectAnswerID(mQuestionSampleIDs);
 
-        // Load the image of the composer for the answer into the ImageView.
-        composerView.setImageBitmap(Sample.getComposerArtBySampleID(this, mAnswerSampleID));
+        // Load the question mark as background image
+        mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.question_mark));
 
         // If there is only one answer left, end the game.
         if (mQuestionSampleIDs.size() < 2) {
