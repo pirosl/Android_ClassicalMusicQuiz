@@ -108,6 +108,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    private void releasePlayer() {
+        mPlayer.stop();
+        mPlayer.release();
+        mPlayer = null;
+    }
+
     /**
      * Initialize exo player
      * @param mediaUri
@@ -211,6 +217,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < mQuestionSampleIDs.size(); i++) {
             int buttonSampleID = mQuestionSampleIDs.get(i);
 
+            mPlayerView.setDefaultArtwork(Sample.getComposerArtBySampleID(this, mAnswerSampleID));
+
             mButtons[i].setEnabled(false);
             if (buttonSampleID == mAnswerSampleID) {
                 mButtons[i].getBackground().setColorFilter(ContextCompat.getColor
@@ -225,5 +233,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         }
+    }
+
+    /**
+     * Release player when activity is destroyed
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
     }
 }
